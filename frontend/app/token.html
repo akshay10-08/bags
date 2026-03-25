@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CONVICTION — Token Analysis</title>
+  <meta name="description" content="Full 5-agent analysis for any Solana token." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app.css" />
+  <link rel="stylesheet" href="token.css" />
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="app-nav" id="app-navbar">
+    <div class="app-nav-inner">
+      <a href="/" class="app-logo">
+        <span class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+            <polygon points="11,1 21,6.5 21,15.5 11,21 1,15.5 1,6.5" stroke="white" stroke-width="1.5" fill="none"/>
+            <polygon points="11,5 17,8.5 17,13.5 11,17 5,13.5 5,8.5" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none"/>
+            <circle cx="11" cy="11" r="2.5" fill="white"/>
+          </svg>
+        </span>
+        <span class="logo-text">CONVICTION</span>
+      </a>
+      <div class="app-nav-links">
+        <a href="index.html" class="app-nav-link">← Dashboard</a>
+      </div>
+      <div class="app-nav-right">
+        <button class="btn-connect" id="connect-btn">
+          <span class="connect-dot" id="connect-dot"></span>
+          <span id="connect-label">Connect Wallet</span>
+        </button>
+        <div class="wallet-menu hidden" id="wallet-menu">
+          <button id="disconnect-btn">Disconnect</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── LOADING STATE ── -->
+  <div class="tk-loading" id="tk-loading">
+    <div class="tk-loading-inner">
+      <div class="tk-spinner"></div>
+      <p>Running 5-agent pipeline...</p>
+    </div>
+  </div>
+
+  <!-- ── ERROR STATE ── -->
+  <div class="tk-error hidden" id="tk-error">
+    <div class="tk-error-inner">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" stroke="#ff4444" stroke-width="1.5" opacity="0.5"/><path d="M20 12v10M20 26v2" stroke="#ff4444" stroke-width="2" stroke-linecap="round"/></svg>
+      <h2 id="tk-error-title">Token Not Found</h2>
+      <p id="tk-error-msg">Could not analyze this address. Please check it and try again.</p>
+      <a href="index.html" class="tk-back-btn">← Back to Dashboard</a>
+    </div>
+  </div>
+
+  <!-- ── MAIN TOKEN CONTENT ── -->
+  <main class="tk-main hidden" id="tk-main">
+
+    <!-- TOP SECTION -->
+    <section class="tk-section tk-top">
+      <div class="tk-breadcrumb">
+        <a href="index.html">Dashboard</a>
+        <span>/</span>
+        <span id="tk-symbol-breadcrumb">TOKEN</span>
+      </div>
+
+      <div class="tk-header-row">
+        <div class="tk-header-left">
+          <div class="tk-token-identity">
+            <div class="tk-symbol-badge" id="tk-symbol-badge">TKN</div>
+            <div>
+              <h1 class="tk-symbol" id="tk-symbol">TOKEN</h1>
+              <div class="tk-address-row">
+                <span class="tk-address" id="tk-address">Loading...</span>
+                <button class="tk-copy-btn" id="tk-copy-btn" title="Copy address">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="5" y="5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M9 5V3.5A1.5 1.5 0 0 0 7.5 2h-4A1.5 1.5 0 0 0 2 3.5v4A1.5 1.5 0 0 0 3.5 9H5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <p class="tk-summary" id="tk-summary">Loading agent summary...</p>
+          <div class="tk-meta-row">
+            <span class="tk-meta-item">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><path d="M6 3v3.5l2 1.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+              <span id="tk-timestamp">—</span>
+            </span>
+            <button class="tk-reanalyze-btn" id="tk-reanalyze-btn">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M10.5 2.5A5 5 0 1 0 11 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M10.5 2.5V5H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Re-analyze
+            </button>
+          </div>
+        </div>
+
+        <div class="tk-header-right">
+          <div class="tk-score-display">
+            <div class="tk-score-num" id="tk-score-num">—</div>
+            <div class="tk-score-label">conviction</div>
+          </div>
+          <span class="verdict-pill tk-verdict-pill" id="tk-verdict-pill">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MIDDLE SECTION: Agent Cards -->
+    <section class="tk-section">
+      <h2 class="tk-sec-title">Agent Breakdown</h2>
+      <p class="tk-sec-sub">Click any agent card to expand its detailed reasoning</p>
+      <div class="tk-agents-grid" id="tk-agents-grid">
+        <!-- filled by JS -->
+      </div>
+    </section>
+
+    <!-- BOTTOM SECTION: Swap Panel -->
+    <section class="tk-section tk-swap-section" id="tk-swap-section">
+      <h2 class="tk-sec-title">Swap</h2>
+      <div class="swap-panel" id="swap-panel">
+
+        <div class="swap-token-info" id="swap-token-info">
+          <span class="swap-token-symbol" id="swap-symbol">TOKEN</span>
+          <span class="swap-price" id="swap-price">—</span>
+        </div>
+
+        <div class="swap-inputs">
+          <div class="swap-field">
+            <label class="swap-label">You pay</label>
+            <div class="swap-input-wrap">
+              <input type="number" id="swap-sol-input" class="swap-input" placeholder="0.0" min="0" step="0.01" />
+              <span class="swap-currency">SOL</span>
+            </div>
+          </div>
+
+          <div class="swap-arrow">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M6 12l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+
+          <div class="swap-field">
+            <label class="swap-label">You receive (estimated)</label>
+            <div class="swap-input-wrap">
+              <input type="text" id="swap-out-input" class="swap-input" placeholder="—" readonly />
+              <span class="swap-currency" id="swap-out-currency">TOKEN</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="swap-impact-warn hidden" id="swap-impact-warn">
+          ⚠ High price impact: <span id="swap-impact-pct">—</span>. Proceed with caution.
+        </div>
+
+        <div class="swap-actions">
+          <button class="swap-quote-btn" id="swap-quote-btn">Get Quote</button>
+          <button class="swap-main-btn" id="swap-main-btn" disabled>
+            <span id="swap-btn-text">Swap</span>
+            <span id="swap-btn-spinner" class="swap-spinner hidden"></span>
+          </button>
+        </div>
+
+        <div class="swap-tx-result hidden" id="swap-tx-result">
+          <span id="swap-tx-msg"></span>
+          <a id="swap-tx-link" href="#" target="_blank" rel="noopener noreferrer" class="swap-tx-link hidden">View on Solscan ↗</a>
+        </div>
+
+        <div class="swap-fee-info">
+          <span>Fees shared: <strong>50% app</strong> / <strong>30% curator</strong> / <strong>20% referrer</strong></span>
+          <button class="swap-share-btn" id="swap-share-btn">Share &amp; earn ↗</button>
+        </div>
+
+        <div class="swap-locked-overlay hidden" id="swap-locked-overlay">
+          <p>Connect your wallet to swap</p>
+          <button class="btn-gate-connect" id="swap-connect-btn">Connect Wallet</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+  <script src="token.js"></script>
+</body>
+</html>

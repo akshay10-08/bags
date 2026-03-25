@@ -1,0 +1,13 @@
+node_modules/
+.env
+.ps1
+.bat
+.log
+*_output.txt
+*_log.txt
+*_verify.txt
+push.bat
+purge.js
+.gemini/
+dist/
+build/

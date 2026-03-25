@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CONVICTION — Trading Dashboard</title>
+  <meta name="description" content="AI-powered Solana token analysis and trading terminal." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+
+  <!-- ── TOP BAR ── -->
+  <nav class="app-nav" id="app-navbar">
+    <div class="app-nav-inner">
+      <a href="/" class="app-logo">
+        <span class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+            <polygon points="11,1 21,6.5 21,15.5 11,21 1,15.5 1,6.5" stroke="white" stroke-width="1.5" fill="none"/>
+            <polygon points="11,5 17,8.5 17,13.5 11,17 5,13.5 5,8.5" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none"/>
+            <circle cx="11" cy="11" r="2.5" fill="white"/>
+          </svg>
+        </span>
+        <span class="logo-text">CONVICTION</span>
+      </a>
+
+      <div class="app-nav-links">
+        <a href="#dashboard" class="app-nav-link active" id="nav-dashboard">Dashboard</a>
+        <a href="#leaderboard" class="app-nav-link" id="nav-leaderboard">Leaderboard</a>
+        <a href="#portfolio" class="app-nav-link" id="nav-portfolio">Portfolio</a>
+      </div>
+
+      <div class="app-nav-right">
+        <button class="btn-connect" id="connect-btn">
+          <span class="connect-dot" id="connect-dot"></span>
+          <span id="connect-label">Connect Wallet</span>
+        </button>
+        <div class="wallet-menu hidden" id="wallet-menu">
+          <button id="disconnect-btn">Disconnect</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── PRE-CONNECT GATE ── -->
+  <div class="gate-overlay" id="gate-overlay">
+    <div class="gate-content">
+      <div class="gate-icon">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <polygon points="20,2 38,11 38,29 20,38 2,29 2,11" stroke="white" stroke-width="1.5" fill="none" opacity="0.6"/>
+          <circle cx="20" cy="20" r="7" stroke="white" stroke-width="1.5"/>
+          <circle cx="20" cy="20" r="3" fill="white"/>
+        </svg>
+      </div>
+      <h2 class="gate-title">Connect your wallet to start trading</h2>
+      <p class="gate-sub">Access the live leaderboard, run token analysis, and swap in one click.</p>
+      <button class="btn-gate-connect" id="gate-connect-btn">
+        <span>Connect Wallet</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <p class="gate-tiny">Email, Google, or Phantom wallet via Privy</p>
+    </div>
+  </div>
+
+  <!-- ── MAIN DASHBOARD ── -->
+  <main class="app-main" id="app-main">
+
+    <!-- SECTION A: Live Leaderboard -->
+    <section class="app-section" id="leaderboard">
+      <div class="section-header">
+        <div>
+          <h2 class="app-section-title">Live Token Leaderboard</h2>
+          <p class="app-section-sub">Top tokens ranked by conviction score · auto-refreshes every 3 minutes</p>
+        </div>
+        <div class="refresh-chip" id="refresh-chip">
+          <span class="refresh-dot"></span>
+          <span id="refresh-label">LIVE</span>
+        </div>
+      </div>
+
+      <div class="leaderboard-table-wrap">
+        <div class="leaderboard-header-row">
+          <span class="lh-rank">#</span>
+          <span class="lh-token">Token</span>
+          <span class="lh-score">Conviction</span>
+          <span class="lh-verdict">Verdict</span>
+          <span class="lh-volume">24h Volume</span>
+          <span class="lh-traders">Traders</span>
+          <span class="lh-action"></span>
+        </div>
+        <div class="leaderboard-body" id="leaderboard-body">
+          <!-- Rows injected by JS -->
+          <div class="lb-skeleton-wrap" id="lb-skeleton">
+            ${Array.from({length: 8}).map(() => `
+              <div class="lb-skeleton-row">
+                <div class="skel skel-sm"></div>
+                <div class="skel skel-md"></div>
+                <div class="skel skel-lg"></div>
+                <div class="skel skel-sm"></div>
+                <div class="skel skel-md"></div>
+                <div class="skel skel-sm"></div>
+                <div class="skel skel-sm"></div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION B: Quick Analyze -->
+    <section class="app-section" id="dashboard">
+      <div class="section-header">
+        <div>
+          <h2 class="app-section-title">Quick Analyze</h2>
+          <p class="app-section-sub">Paste any token address and run the full 5-agent pipeline inline</p>
+        </div>
+      </div>
+      <div class="qa-input-row">
+        <input
+          type="text"
+          id="qa-input"
+          class="qa-input"
+          placeholder="Enter Solana token address..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button class="qa-btn" id="qa-btn">
+          <span id="qa-btn-text">Analyze</span>
+          <span id="qa-spinner" class="qa-spinner hidden"></span>
+        </button>
+      </div>
+      <div class="qa-error hidden" id="qa-error"></div>
+      <div class="qa-result hidden" id="qa-result">
+        <!-- Result injected by JS -->
+      </div>
+    </section>
+
+    <!-- SECTION C: Portfolio -->
+    <section class="app-section" id="portfolio">
+      <div class="section-header">
+        <div>
+          <h2 class="app-section-title">Your Portfolio</h2>
+          <p class="app-section-sub">Current Solana token holdings with live conviction scores</p>
+        </div>
+        <button class="btn-outline-sm" id="refresh-portfolio-btn">Refresh</button>
+      </div>
+      <div class="portfolio-body" id="portfolio-body">
+        <div class="portfolio-empty" id="portfolio-empty">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/><circle cx="20" cy="20" r="8" stroke="rgba(255,255,255,0.15)" stroke-width="1"/></svg>
+          <p>Loading your portfolio...</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── TOKEN DETAIL INLINE PANEL ── -->
+  <div class="token-panel-overlay hidden" id="token-panel">
+    <div class="token-panel-box">
+      <button class="token-panel-close" id="token-panel-close">&times;</button>
+      <div class="token-panel-content" id="token-panel-content"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

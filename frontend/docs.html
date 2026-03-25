@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CONVICTION — Project Documentation</title>
+  <meta name="description" content="Project documentation for CONVICTION, a multi-agent AI system for Solana." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #f0f0f0;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      padding-top: 100px;
+    }
+    .docs-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 40px 80px 40px;
+      background: #111111;
+      border: 1px solid #1e1e1e;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      position: relative;
+      z-index: 10;
+    }
+    .docs-wrapper {
+      padding: 0 20px 80px 20px;
+    }
+    h1, h2, h3 { color: #fff; font-weight: 700; }
+    h1 { font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    h2 { font-size: 1.5rem; margin-top: 3rem; margin-bottom: 1.2rem; border-bottom: 1px solid #1e1e1e; padding-bottom: 10px; color: #00ff88; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+    h3 { font-size: 1.2rem; margin-top: 2rem; color: #f5a623; margin-bottom: 0.8rem; }
+    p, li { color: #aaaaaa; }
+    ul, ol { margin-bottom: 1.5rem; padding-left: 20px; }
+    li { margin-bottom: 0.5rem; }
+    code { 
+      background: #1a1a1a; 
+      padding: 2px 6px; 
+      border-radius: 4px; 
+      font-family: monospace; 
+      font-size: 0.9em;
+      color: #00ff88;
+      border: 1px solid #333;
+    }
+    pre {
+      background: #0a0a0a;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #1e1e1e;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    pre code {
+      background: transparent;
+      padding: 0;
+      color: #f0f0f0;
+      border: none;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+    th, td {
+      padding: 12px 16px;
+      border: 1px solid #1e1e1e;
+      text-align: left;
+    }
+    th {
+      background: #1a1a1a;
+      color: #00ff88;
+      font-weight: 600;
+    }
+    td {
+      color: #aaa;
+    }
+    blockquote {
+      border-left: 3px solid #00ff88;
+      margin: 1.5rem 0 2.5rem 0;
+      padding: 0.5rem 0 0.5rem 1.2rem;
+      background: rgba(0, 255, 136, 0.03);
+      border-radius: 0 8px 8px 0;
+    }
+    blockquote p {
+      color: #888;
+      font-style: italic;
+      margin: 0;
+    }
+    hr {
+      border: 0;
+      height: 1px;
+      background: #1e1e1e;
+      margin: 3rem 0;
+    }
+    .back-nav {
+      margin-bottom: 30px;
+      display: inline-flex;
+      align-items: center;
+      color: #888;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      font-weight: 500;
+    }
+    .back-nav:hover {
+      color: #00ff88;
+    }
+    .back-nav svg { margin-right: 8px; }
+    
+    /* Specific styling for the API tables and json blocks to match terminal look */
+    .token-json {
+      color: #8a8a8a;
+    }
+    .token-string { color: #00ff88; }
+    .token-number { color: #f5a623; }
+    .token-boolean { color: #00b8ff; }
+    .token-key { color: #fff; }
+    
+    strong { color: #e0e0e0; }
+  </style>
+</head>
+<body>
+  
+  <!-- BACKGROUND CANVAS -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav scrolled" id="navbar" style="background: rgba(10, 10, 10, 0.8);">
+    <div class="nav-inner">
+      <a href="index.html" class="logo" id="logo-link">
+        <span class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <polygon points="11,1 21,6.5 21,15.5 11,21 1,15.5 1,6.5" stroke="white" stroke-width="1.5" fill="none"/>
+            <polygon points="11,5 17,8.5 17,13.5 11,17 5,13.5 5,8.5" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none"/>
+            <circle cx="11" cy="11" r="2.5" fill="white"/>
+          </svg>
+        </span>
+        <span class="logo-text">CONVICTION</span>
+      </a>
+      <div class="nav-cta">
+        <a href="index.html" class="btn-primary" id="nav-launch">Back to App</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="docs-wrapper">
+    <div class="docs-container">
+      <a href="index.html" class="back-nav">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Return to Landing Page
+      </a>
+
+      <h1>CONVICTION — Project Documentation</h1>
+      <blockquote>
+        <p>Multi-agent token discovery and trading terminal for Bags.fm / Solana</p>
+        <p>Built for the Bags.fm Q1 2026 Hackathon</p>
+      </blockquote>
+
+      <hr />
+
+      <h2>1. WHAT IS CONVICTION?</h2>
+      <p>Conviction is a Bags-native web app where 5 specialised AI agents collaborate to discover, score, and surface high-potential Solana tokens from the Bags.fm ecosystem. Users see a live leaderboard of tokens ranked by a "conviction score" — a weighted consensus from all 5 agents — and can swap directly inside the app in one click.</p>
+      
+      <p><strong>One-line pitch:</strong><br>
+      Conviction is the AI brain for Bags — it finds the tokens worth trading before everyone else does.</p>
+      
+      <p><strong>Hackathon tracks:</strong></p>
+      <ul>
+        <li>AI Agents</li>
+        <li>Bags API</li>
+        <li>Fee Sharing</li>
+        <li>DeFi</li>
+      </ul>
+
+      <h2>2. CORE USER FLOW</h2>
+      <ol>
+        <li>User opens Conviction</li>
+        <li>Sees live leaderboard of newly launched Bags/Solana tokens</li>
+        <li>Each token has a conviction score (0–100) updated every few minutes</li>
+        <li>User clicks a token → sees why the swarm likes it (agent reasoning)</li>
+        <li>User clicks "Swap" → Privy wallet signs → trade executes via Bags API</li>
+        <li>App fee is split onchain via Bags fee-sharing between:
+          <ul>
+            <li>App treasury (50%)</li>
+            <li>Signal curator (30%)</li>
+            <li>Referrer (20%)</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h2>3. TECH STACK</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Technology</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Frontend</td><td>Next.js 14, Tailwind CSS, React</td></tr>
+          <tr><td>Wallet</td><td>Privy SDK (embedded wallet, no Phantom needed)</td></tr>
+          <tr><td>Backend</td><td>Node.js, Express</td></tr>
+          <tr><td>AI Agents</td><td>Claude API via @anthropic-ai/sdk (claude-sonnet-4-20250514)</td></tr>
+          <tr><td>Solana data</td><td>Helius RPC + Helius streaming</td></tr>
+          <tr><td>Token data</td><td>Bags API</td></tr>
+          <tr><td>Live events</td><td>Bags ReStream (beta)</td></tr>
+          <tr><td>Liquidity</td><td>Meteora pools API</td></tr>
+          <tr><td>Deployment</td><td>Vercel (frontend), Railway (backend)</td></tr>
+        </tbody>
+      </table>
+
+      <h2>4. ENVIRONMENT VARIABLES</h2>
+<pre><code><span class="token-key">ANTHROPIC_API_KEY</span>=          <span class="token-json"># Claude API — all agent calls</span>
+<span class="token-key">BAGS_API_KEY</span>=               <span class="token-json"># Bags.fm API — token data, swaps, fees</span>
+<span class="token-key">HELIUS_API_KEY</span>=             <span class="token-json"># Helius — Solana RPC + volume data</span>
+<span class="token-key">PRIVY_APP_ID</span>=               <span class="token-json"># Privy — wallet infrastructure</span>
+<span class="token-key">NEXT_PUBLIC_PRIVY_APP_ID</span>=   <span class="token-json"># Same value as PRIVY_APP_ID (public)</span></code></pre>
+
+      <h2>5. PROJECT FOLDER STRUCTURE</h2>
+<pre><code>/conviction
+  /frontend
+    /app
+      page.tsx              → homepage leaderboard
+      /token/[address]
+        page.tsx            → token detail + agent reasoning + swap
+    /components
+      Leaderboard.tsx       → live ranked token list
+      TokenCard.tsx         → single token row with score
+      AgentPanel.tsx        → shows each agent's score + reasons
+      SwapButton.tsx        → one-click swap via Bags API
+      ConvictionBadge.tsx   → visual score indicator (strong/moderate/weak)
+    /lib
+      bagsClient.ts         → frontend Bags API wrapper
+      privyConfig.ts        → Privy setup
+  /backend
+    /agents
+      launchScout.js        → scores new token launches
+      momentumAnalyst.js    → scores trading momentum
+      creatorChecker.js     → scores creator reputation
+      feeAnalyst.js         → scores fee health
+      riskManager.js        → rule-based risk gate (no LLM)
+      coordinator.js        → aggregates all scores
+    /api
+      tokens.js             → GET /api/tokens/latest
+      token.js              → GET /api/tokens/:address
+      swap.js               → POST /api/swap
+      quote.js              → GET /api/tokens/:address/quote
+    /services
+      bagsService.js        → all Bags API calls
+      heliusService.js      → Helius RPC calls
+      meteoraService.js     → Meteora pool data
+      feeShareService.js    → Bags fee-share config + claims
+    /prompts
+      launchScoutPrompt.js
+      momentumPrompt.js
+      creatorPrompt.js
+      feePrompt.js
+    agentRunner.js          → shared Claude API wrapper
+  /shared
+    types.js                → shared data schemas
+    constants.js            → weights, thresholds, config
+  .env
+  .env.example
+  README.md</code></pre>
+
+      <h2>6. THE 5 AGENTS</h2>
+      
+      <h3>Agent 1 — Launch Scout</h3>
+      <ul>
+        <li><strong>Job:</strong> Identifies newly launched tokens with early traction signals</li>
+        <li><strong>Bags API calls:</strong> token launch feed, token creator lookup</li>
+        <li><strong>Scores:</strong> launch recency, creator verification, first-hour activity</li>
+        <li><strong>Weight in coordinator:</strong> 20%</li>
+      </ul>
+
+      <h3>Agent 2 — Momentum Analyst</h3>
+      <ul>
+        <li><strong>Job:</strong> Tracks trading momentum and swap velocity</li>
+        <li><strong>Data:</strong> Helius volume, active traders, Bags swap count</li>
+        <li><strong>Scores:</strong> 24h volume growth, unique trader count, swap frequency</li>
+        <li><strong>Weight in coordinator:</strong> 30%</li>
+      </ul>
+
+      <h3>Agent 3 — Creator Checker</h3>
+      <ul>
+        <li><strong>Job:</strong> Checks the token creator's onchain reputation</li>
+        <li><strong>Bags API calls:</strong> creator profile, wallet history via Helius</li>
+        <li><strong>Scores:</strong> wallet age, past successful tokens, rug history</li>
+        <li><strong>Weight in coordinator:</strong> 25%</li>
+      </ul>
+
+      <h3>Agent 4 — Fee Analyst</h3>
+      <ul>
+        <li><strong>Job:</strong> Analyses fee generation and claim patterns</li>
+        <li><strong>Bags API calls:</strong> lifetime fees, claim events</li>
+        <li><strong>Scores:</strong> fee consistency, healthy claim frequency, drain patterns</li>
+        <li><strong>Weight in coordinator:</strong> 25%</li>
+      </ul>
+
+      <h3>Agent 5 — Risk Manager (rule-based, no LLM)</h3>
+      <ul>
+        <li><strong>Job:</strong> Hard gate that blocks obvious low-quality tokens</li>
+        <li><strong>Logic:</strong>
+          <ul>
+            <li>if any agent score < 0.2 → BLOCK</li>
+            <li>if creator agent flag = block → BLOCK</li>
+            <li>if 3+ agents score < 0.4 → WARN</li>
+            <li>otherwise → PASS</li>
+          </ul>
+        </li>
+        <li><strong>Output:</strong> <code>{ flag: "pass" | "warn" | "block", blockedBy, warnings }</code></li>
+      </ul>
+
+      <h2>7. AGENT OUTPUT FORMAT</h2>
+      <p>Every LLM agent returns this exact JSON:</p>
+<pre><code>{
+  <span class="token-string">"agentName"</span>: <span class="token-string">"launchScout"</span>,
+  <span class="token-string">"score"</span>: <span class="token-number">0.78</span>,
+  <span class="token-string">"confidence"</span>: <span class="token-number">0.85</span>,
+  <span class="token-string">"reasons"</span>: [
+    <span class="token-string">"Token launched 47 minutes ago with strong early volume"</span>,
+    <span class="token-string">"Creator has 3 previously successful tokens on Bags"</span>,
+    <span class="token-string">"First-hour trader count is in top 5% of recent launches"</span>
+  ],
+  <span class="token-string">"flag"</span>: <span class="token-string">"pass"</span>
+}</code></pre>
+
+      <h2>8. COORDINATOR LOGIC</h2>
+<pre><code>Input: outputs from all 5 agents
+
+If riskManager.flag === "block":
+  → return { conviction: 0, verdict: "blocked" }
+
+Otherwise:
+  conviction = (
+    launchScout.score   * 0.20 +
+    momentumAnalyst.score * 0.30 +
+    creatorChecker.score * 0.25 +
+    feeAnalyst.score    * 0.25
+  ) * launchScout.confidence (average)
+
+Verdict mapping:
+  conviction > 0.75 → "strong"
+  conviction > 0.55 → "moderate"
+  conviction > 0.35 → "weak"
+  else             → "blocked"
+
+swapReady = conviction > 0.65</code></pre>
+
+      <p><strong>Coordinator final output:</strong></p>
+<pre><code>{
+  <span class="token-string">"tokenAddress"</span>: <span class="token-string">"So11..."</span>,
+  <span class="token-string">"tokenSymbol"</span>: <span class="token-string">"EXAMPLE"</span>,
+  <span class="token-string">"conviction"</span>: <span class="token-number">0.72</span>,
+  <span class="token-string">"verdict"</span>: <span class="token-string">"strong"</span>,
+  <span class="token-string">"summary"</span>: <span class="token-string">"High-momentum new launch from a verified creator with healthy fee flow."</span>,
+  <span class="token-string">"swapReady"</span>: <span class="token-boolean">true</span>,
+  <span class="token-string">"agentReports"</span>: [ <span class="token-json">...all 5 agent outputs...</span> ],
+  <span class="token-string">"timestamp"</span>: <span class="token-string">"2026-03-22T10:00:00Z"</span>
+}</code></pre>
+
+      <h2>9. BAGS API ENDPOINTS USED</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Function</th>
+            <th>Endpoint</th>
+            <th>Used by</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>New token launches</td><td>Bags token launch feed</td><td>Launch Scout</td></tr>
+          <tr><td>Token creator info</td><td>Bags creator lookup</td><td>Launch Scout, Creator Checker</td></tr>
+          <tr><td>Lifetime fees</td><td>Bags lifetime fees</td><td>Fee Analyst</td></tr>
+          <tr><td>Claim events</td><td>Bags claim events</td><td>Fee Analyst</td></tr>
+          <tr><td>Fee-share config</td><td>Bags fee-share config</td><td>Fee Share Service</td></tr>
+          <tr><td>Trade quote</td><td>Bags trade quote</td><td>Swap flow</td></tr>
+          <tr><td>Build swap tx</td><td>Bags swap transaction</td><td>Swap flow</td></tr>
+          <tr><td>Send transaction</td><td>Bags send transaction</td><td>Swap flow</td></tr>
+          <tr><td>Claim fees</td><td>Bags claim transaction</td><td>Revenue distribution</td></tr>
+        </tbody>
+      </table>
+
+      <h2>10. BACKEND API ROUTES</h2>
+<pre><code><span class="token-key">GET</span>  /api/tokens/latest
+     → returns top 20 tokens from Bags feed with conviction scores
+     → refreshes every 3 minutes
+
+<span class="token-key">GET</span>  /api/tokens/:address
+     → runs full 5-agent pipeline on one token
+     → returns complete coordinator output
+
+<span class="token-key">GET</span>  /api/tokens/:address/quote
+     → calls Bags trade quote API
+     → returns { price, priceImpact, estimatedOut, route }
+
+<span class="token-key">POST</span> /api/swap
+     body: { tokenAddress, amount, walletAddress, referrerAddress }
+     → builds swap transaction via Bags API
+     → returns { txHash, status }</code></pre>
+
+      <h2>11. FEE SHARING SETUP</h2>
+      <p>Conviction earns revenue from every swap made through the app.<br>
+      Revenue is split onchain using Bags fee-share config:</p>
+<pre><code>App treasury wallet:   50%
+Signal curator:        30%  (top contributor who flagged the token)
+Referrer:              20%  (whoever referred the user)</code></pre>
+      <p>Every swap call includes the referrer address as a param.<br>
+      Users can generate referral links from inside the app.<br>
+      Fees are claimable onchain at any time via the Bags claim transaction API.</p>
+
+      <h2>12. FRONTEND DESIGN DIRECTION</h2>
+      <p><strong>Aesthetic:</strong> Dark terminal / trading desk. Professional but alive.<br>
+      <strong>Feel:</strong> Bloomberg meets crypto native. Data-dense but scannable.</p>
+
+      <p><strong>Color palette:</strong></p>
+      <ul>
+        <li>Background: near-black <code>#0a0a0a</code></li>
+        <li>Surface cards: <code>#111111</code></li>
+        <li>Borders: <code>#1e1e1e</code></li>
+        <li>Primary accent: electric green <code>#00ff88</code> (conviction = strong)</li>
+        <li>Warn accent: amber <code>#f5a623</code></li>
+        <li>Block/danger: red <code>#ff4444</code></li>
+        <li>Text primary: <code>#f0f0f0</code></li>
+        <li>Text secondary: <code>#888888</code></li>
+      </ul>
+
+      <p><strong>Key UI components:</strong></p>
+      <ol>
+        <li><strong>Leaderboard</strong> — live ranked list, auto-refreshes, conviction score shown as a coloured bar (green/amber/red)</li>
+        <li><strong>Token detail page</strong> — shows:
+          <ul>
+            <li>Token name, symbol, age, creator</li>
+            <li>Big conviction score number (0–100)</li>
+            <li>Verdict badge (STRONG / MODERATE / WEAK / BLOCKED)</li>
+            <li>Agent breakdown panel: each agent's score, confidence, 3–5 reasons in plain English</li>
+            <li>Live swap panel: amount input, price quote, one-click swap button</li>
+          </ul>
+        </li>
+        <li><strong>Swap button states:</strong>
+          <ul>
+            <li>Default: "Swap [TOKEN]"</li>
+            <li>Loading: "Getting quote..."</li>
+            <li>Ready: "Swap for 0.05 SOL"</li>
+            <li>Confirming: "Confirm in wallet..."</li>
+            <li>Done: "Swapped ✓"</li>
+          </ul>
+        </li>
+        <li><strong>ConvictionBadge:</strong>
+          <ul>
+            <li>STRONG → <span style="color:#00ff88">green pill</span></li>
+            <li>MODERATE → <span style="color:#f5a623">amber pill</span></li>
+            <li>WEAK → <span style="color:#888">gray pill</span></li>
+            <li>BLOCKED → <span style="color:#ff4444">red pill with lock icon</span></li>
+          </ul>
+        </li>
+      </ol>
+
+      <h2>13. AGENT RUNNER (agentRunner.js)</h2>
+      <p>Shared utility used by all LLM agents:</p>
+<pre><code><span class="token-key">const</span> Anthropic = <span class="token-boolean">require</span>(<span class="token-string">'@anthropic-ai/sdk'</span>);
+<span class="token-key">const</span> client = <span class="token-key">new</span> Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+<span class="token-key">async function</span> runAgent(agentName, systemPrompt, tokenData) {
+  <span class="token-key">try</span> {
+    <span class="token-key">const</span> message = <span class="token-key">await</span> client.messages.create({
+      model: <span class="token-string">'claude-sonnet-4-20250514'</span>,
+      max_tokens: <span class="token-number">1000</span>,
+      system: systemPrompt,
+      messages: [
+        {
+          role: <span class="token-string">'user'</span>,
+          content: <span class="token-string">`Analyse this token and return your assessment as JSON:
+          ${JSON.stringify(tokenData, null, 2)}
+          
+          Return ONLY valid JSON in this exact format:
+          {
+            "agentName": "${agentName}",
+            "score": <number 0-1>,
+            "confidence": <number 0-1>,
+            "reasons": [<3-5 plain English strings>],
+            "flag": "<pass|warn|block>"
+          }`</span>
+        }
+      ]
+    });
+
+    <span class="token-key">const</span> raw = message.content[0].text;
+    <span class="token-key">const</span> parsed = JSON.parse(raw);
+    console.log(<span class="token-string">`[${agentName}] score: ${parsed.score} | flag: ${parsed.flag}`</span>);
+    <span class="token-key">return</span> parsed;
+
+  } <span class="token-key">catch</span> (error) {
+    console.error(<span class="token-string">`[${agentName}] failed:`</span>, error.message);
+    <span class="token-key">return</span> {
+      agentName,
+      score: <span class="token-number">0.5</span>,
+      confidence: <span class="token-number">0.1</span>,
+      reasons: [<span class="token-string">'Agent failed to run — defaulting to neutral score'</span>],
+      flag: <span class="token-string">'warn'</span>
+    };
+  }
+}
+
+module.exports = { runAgent };</code></pre>
+
+      <h2>14. HACKATHON REQUIREMENTS CHECKLIST</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Requirement</th>
+            <th>How Conviction meets it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Must use Bags</td><td>✓ Bags API for token data, swaps, fees, claims</td></tr>
+          <tr><td>Must have Bags token</td><td>✓ Conviction app token launched via Bags</td></tr>
+          <tr><td>Fee sharing app</td><td>✓ 3-way onchain split on every swap</td></tr>
+          <tr><td>Verifiable onchain</td><td>✓ All swaps + fee claims are public txs</td></tr>
+          <tr><td>Real users + transactions</td><td>✓ Built-in swap drives real onchain volume</td></tr>
+          <tr><td>AI Agents track</td><td>✓ 5-agent swarm with coordinator</td></tr>
+          <tr><td>Ship to win</td><td>✓ Full product, not a prototype</td></tr>
+        </tbody>
+      </table>
+
+      <h2>15. KEY RULES FOR ALL CODE</h2>
+      <ol>
+        <li>Never hardcode API keys — always use <code>process.env</code></li>
+        <li>Every async function must have try/catch with clear error messages</li>
+        <li>Console.log input and output of every agent run for debugging</li>
+        <li>All agent system prompts live in <code>/backend/prompts/</code> as separate files</li>
+        <li>Keep agent output format consistent — always the same JSON schema</li>
+        <li>Rate limit all API routes: max 10 requests/min per IP</li>
+        <li>All frontend API calls go through <code>/api/</code> routes — never call Bags API directly from frontend</li>
+        <li>Privy handles all wallet signing — never handle private keys directly</li>
+      </ol>
+
+      <br>
+      <hr>
+      <p style="text-align:center; font-style:italic;">This document is the single source of truth for the Conviction project.<br>Always refer back to this when making architectural decisions.</p>
+    </div>
+  </div>
+
+  <footer class="footer" style="position:relative; z-index:10;">
+    <div class="footer-line"></div>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-text">CONVICTION</span>
+      </div>
+      <p class="footer-copy">Built for the Bags.fm Hackathon on Solana. Powered by Claude AI.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple script to inject background canvas from main page
+    (function initCanvas() {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx    = canvas.getContext('2d');
+      let W, H, dots = [];
+
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+
+      function buildDots() {
+        dots = [];
+        const spacing = 48;
+        for (let x = 0; x <= W; x += spacing) {
+          for (let y = 0; y <= H + 600; y += spacing) {
+            dots.push({ x, y, base: y, r: Math.random() * 0.8 + 0.2, o: Math.random() * 0.35 + 0.05 });
+          }
+        }
+      }
+
+      let scrollY = 0;
+      window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        dots.forEach(d => {
+          const parallax = scrollY * 0.08;
+          const screenY  = d.y - parallax;
+          if (screenY < -10 || screenY > H + 10) return;
+          ctx.beginPath();
+          ctx.arc(d.x, screenY, d.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${d.o})`;
+          ctx.fill();
+        });
+
+        for (let i = 0; i < 3; i++) {
+          const sx = Math.random() * W;
+          const sy = Math.random() * H;
+          ctx.beginPath();
+          ctx.arc(sx, sy, 0.4, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255,255,255,0.5)';
+          ctx.fill();
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', () => { resize(); buildDots(); });
+      resize();
+      buildDots();
+      draw();
+    })();
+  </script>
+</body>
+</html>

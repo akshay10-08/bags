@@ -1,0 +1,22 @@
+{
+  "name": "conviction",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @conviction/shared && npm run build --workspace @conviction/agents && npm run build --workspace @conviction/orchestrator && npm run build --workspace conviction-dashboard",
+    "demo": "tsx packages/agents/src/cli.ts ETH/USDC",
+    "dev": "tsx packages/agents/src/cli.ts",
+    "dev:dashboard": "npm run dev --workspace conviction-dashboard",
+    "dev:orchestrator": "npm run dev --workspace @conviction/orchestrator",
+    "typecheck": "tsc -b --force --pretty false",
+    "preview:dashboard": "npm run preview --workspace conviction-dashboard"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "tsx": "^4.20.5",
+    "typescript": "^5.8.3"
+  }
+}
