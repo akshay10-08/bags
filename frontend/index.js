@@ -213,7 +213,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 
 /* ── PART 2: LIVE STATS ── */
 (function initLiveStats() {
-  const BACKEND = 'http://localhost:3000';
+  const BACKEND = window.__BACKEND_URL__ || 'http://localhost:3000';
 
   function animateNum(el, target, suffix = '') {
     const duration = 1500;
@@ -249,7 +249,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 
 /* ── PART 3: ANALYZE TOKEN MODAL ── */
 (function initAnalyzeModal() {
-  const BACKEND = 'http://localhost:3000';
+  const BACKEND = window.__BACKEND_URL__ || 'http://localhost:3000';
   const overlay    = document.getElementById('analyze-modal');
   const closeBtn   = document.getElementById('modal-close');
   const runBtn     = document.getElementById('modal-run-btn');
@@ -342,7 +342,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 
 /* ── PART 6: AGENT CARDS STATUS & DRAWER ── */
 (function initAgentCards() {
-  const BACKEND = 'http://localhost:3000';
+  const BACKEND = window.__BACKEND_URL__ || 'http://localhost:3000';
   const overlay = document.getElementById('agent-drawer');
   const closeBtn = document.getElementById('drawer-close');
   

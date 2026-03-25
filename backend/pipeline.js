@@ -1,21 +1,23 @@
-import { checkLaunches } from './agents/launchScout.js';
-import { analyzeMomentum } from './agents/momentumAnalyst.js';
-import { checkCreator } from './agents/creatorChecker.js';
-import { analyzeFees } from './agents/feeAnalyst.js';
-import { manageRisk } from './agents/riskManager.js';
-import { coordinate } from './agents/coordinator.js';
+import { runLaunchScout } from './agents/launchScout.js';
+import { runMomentumAnalyst } from './agents/momentumAnalyst.js';
+import { runCreatorChecker } from './agents/creatorChecker.js';
+import { runFeeAnalyst } from './agents/feeAnalyst.js';
+import { runRiskManager } from './agents/riskManager.js';
+import { runCoordinator } from './agents/coordinator.js';
 
 export async function runTokenPipeline(tokenAddress) {
   try {
-    const scout = await checkLaunches(tokenAddress);
-    const momentum = await analyzeMomentum(tokenAddress);
-    const creator = await checkCreator(tokenAddress);
-    const fee = await analyzeFees(tokenAddress);
+    const scout    = await runLaunchScout(tokenAddress);
+    const momentum = await runMomentumAnalyst(tokenAddress);
+    const creator  = await runCreatorChecker(tokenAddress);
+    const fee      = await runFeeAnalyst(tokenAddress);
 
-    const risk = manageRisk([scout, momentum, creator, fee]);
-    return coordinate(tokenAddress, { scout, momentum, creator, fee, risk });
+    const agentReports = { launchScout: scout, momentumAnalyst: momentum, creatorChecker: creator, feeAnalyst: fee };
+    const risk = await runRiskManager(tokenAddress, agentReports);
+
+    return await runCoordinator(tokenAddress);
   } catch (error) {
-    console.error(`Pipeline error for ${tokenAddress}:`, error);
+    console.error(`[Pipeline] Error for ${tokenAddress}:`, error.message);
     return {
       tokenAddress,
       conviction: 0,

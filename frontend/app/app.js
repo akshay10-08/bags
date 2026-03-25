@@ -2,7 +2,7 @@
  * CONVICTION — App Dashboard
  * Handles: Wallet Connect (Privy), Leaderboard, Quick Analyze, Portfolio
  */
-const BACKEND = 'http://localhost:3000';
+const BACKEND = window.__BACKEND_URL__ || 'http://localhost:3000';
 const HELIUS_KEY = window.__HELIUS_KEY__ || '';
 
 /* ── STATE ── */
@@ -83,6 +83,7 @@ async function disconnectWallet() {
 function setWalletConnected(addr) {
   walletAddress = addr;
   window.__walletAddress__ = addr; // expose for token.js
+  try { localStorage.setItem('conviction_wallet', addr); } catch(e) {}
   if (window.__onWalletConnect__) window.__onWalletConnect__(addr);
   const short = addr.length > 14 ? `${addr.slice(0,6)}...${addr.slice(-4)}` : addr;
   connectLabel.textContent = short;
@@ -96,6 +97,7 @@ function setWalletConnected(addr) {
 function setWalletDisconnected() {
   walletAddress = null;
   window.__walletAddress__ = null;
+  try { localStorage.removeItem('conviction_wallet'); } catch(e) {}
   if (window.__onWalletDisconnect__) window.__onWalletDisconnect__();
   connectLabel.textContent = 'Connect Wallet';
   connectDot.classList.remove('online');
@@ -474,6 +476,12 @@ refreshPortfolioBtn?.addEventListener('click', loadPortfolio);
 
 async function init() {
   await initPrivy();
+
+  // Restore wallet from localStorage first (instant, no flicker)
+  try {
+    const saved = localStorage.getItem('conviction_wallet');
+    if (saved) setWalletConnected(saved);
+  } catch(e) {}
 
   // Check if Privy already has a session
   if (privy) {

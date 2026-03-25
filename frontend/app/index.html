@@ -93,17 +93,14 @@
         <div class="leaderboard-body" id="leaderboard-body">
           <!-- Rows injected by JS -->
           <div class="lb-skeleton-wrap" id="lb-skeleton">
-            ${Array.from({length: 8}).map(() => `
-              <div class="lb-skeleton-row">
-                <div class="skel skel-sm"></div>
-                <div class="skel skel-md"></div>
-                <div class="skel skel-lg"></div>
-                <div class="skel skel-sm"></div>
-                <div class="skel skel-md"></div>
-                <div class="skel skel-sm"></div>
-                <div class="skel skel-sm"></div>
-              </div>
-            `).join('')}
+            <div class="lb-skeleton-row"><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-lg"></div><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-sm"></div><div class="skel skel-sm"></div></div>
+            <div class="lb-skeleton-row"><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-lg"></div><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-sm"></div><div class="skel skel-sm"></div></div>
+            <div class="lb-skeleton-row"><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-lg"></div><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-sm"></div><div class="skel skel-sm"></div></div>
+            <div class="lb-skeleton-row"><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-lg"></div><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-sm"></div><div class="skel skel-sm"></div></div>
+            <div class="lb-skeleton-row"><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-lg"></div><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-sm"></div><div class="skel skel-sm"></div></div>
+            <div class="lb-skeleton-row"><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-lg"></div><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-sm"></div><div class="skel skel-sm"></div></div>
+            <div class="lb-skeleton-row"><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-lg"></div><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-sm"></div><div class="skel skel-sm"></div></div>
+            <div class="lb-skeleton-row"><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-lg"></div><div class="skel skel-sm"></div><div class="skel skel-md"></div><div class="skel skel-sm"></div><div class="skel skel-sm"></div></div>
           </div>
         </div>
       </div>
@@ -164,6 +161,9 @@
     </div>
   </div>
 
+  <script src="../config.js"></script>
+  <!-- Privy SDK — uncomment once you have a PRIVY_APP_ID -->
+  <!-- <script src="https://cdn.privy.io/sdk/v1/privy.js"></script> -->
   <script src="app.js"></script>
 </body>
 </html>

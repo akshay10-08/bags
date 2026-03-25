@@ -3,10 +3,10 @@
  * Handles: data loading, agent card expand/collapse, swap flow
  */
 
-const BACKEND = 'http://localhost:3000';
+const BACKEND = window.__BACKEND_URL__ || 'http://localhost:3000';
 
 /* ── WALLET STATE (synced with app.js which runs first) ── */
-let walletAddress = window.__walletAddress__ || null;
+let walletAddress = window.__walletAddress__ || (() => { try { return localStorage.getItem('conviction_wallet'); } catch(e) { return null; } })();
 
 // Bridge: if app.js exposed a global we read it on load
 function syncWallet() {
